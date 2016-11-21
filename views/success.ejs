@@ -3,29 +3,24 @@
     <head>
         <title>SelectPOP Demo Project</title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
-        <script type='javascript' src = '/javascripts/success.js'/>
+        <link rel='stylesheet' href='/stylesheets/success.css' />
+        <script src = '/javascripts/jquery-1.8.0.js'></script>
+        <script src = '/javascripts/success.js'></script>
     </head>
     <body>
         <center>
-            <table style = "margin-top: 3%;">
-                <tr style = "height: 30px;" align = "center">
-                    <td>
-                        <input type = "text" id = "content" value = "Hello, Danny"/>
-                    </td>
-                </tr>
-
-                <tr  style = "height: 30px;" align = "center">
-                    <td>
-                        <input type = "text" id = "link" value = "" readonly>
-                    </td>
-                </tr>
-
-                <tr  style = "height: 30px;" align = "center">
-                    <td>
-                        <input type = "button" value = "Generate link" onClick = "onGenerateLink()">
-                    </td>
-                </tr>
-            </table>
+        <table class = 'chatTable'>
+            <tr align = "center">
+                <td>
+                    <input type = 'text' class = 'link' readonly>
+                    <input type = 'button' class = 'generateLink' value = 'Generate link'>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <div class = 'chatBox' align = "left"></div>
+            <input type = 'text' class = 'msgBox'/>
+        </div>
         </center>
     </body>
 </html>

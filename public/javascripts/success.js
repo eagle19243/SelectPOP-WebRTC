@@ -1,7 +1,32 @@
 /**
  * Created by admin on 20/11/16.
  */
-function onGenerateLink() {
-    console.log('onGenerateLink()');
-    $('.link').value('http://dev.selectpop.com/');
-}
+
+$(document).ready(function () {
+    var username;
+
+    $.post('/success/getUsername', function(result) {
+        username = result;
+    })
+
+    /*--------------Generate Link button Handler-------------*/
+    $('.generateLink').click(function () {
+        $('.link').val('http://dev.selectpop.com/');
+    });
+
+    /*--------------MessageBox KeyDown Handler-------------*/
+    $('.msgBox').keyup(function (event) {
+        var timeString = new Date().toLocaleTimeString();
+
+        if (event.which == 13) {
+            $('.chatBox').append(
+                '<div class = "msgln">' +
+                '(' + timeString  + ') <b>' + username + '<b>:' + $('.msgBox').val() +
+                '</div>');
+            console.log($('.chatBox').html());
+            $('.msgBox').val('');
+            event.preventDefault();
+        }
+    });
+
+});

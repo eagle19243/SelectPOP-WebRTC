@@ -1,0 +1,25 @@
+.chatTable {
+    width: 400px;
+    margin-top: 3%;
+}
+
+.chatBox {
+    width: 550px;
+    height: 500px;
+    background-color: #00B7FF;
+    margin-top: 20px;
+}
+
+.msgBox {
+    width: 550px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.link {
+    width: 250px;
+}
+
+.msgln {
+    width: 550px;
+}
