@@ -5,7 +5,7 @@
 $(document).ready(function () {
     var username;
 
-    $.post('/success/getUsername', function(result) {
+    $.post('/user/getUsername', function(result) {
         username = result;
     })
 

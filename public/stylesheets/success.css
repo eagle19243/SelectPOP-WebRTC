@@ -6,8 +6,10 @@
 .chatBox {
     width: 550px;
     height: 500px;
-    background-color: #00B7FF;
     margin-top: 20px;
+    border: 1px;
+    border-color: #AFAEAF;
+    border-style: solid;
 }
 
 .msgBox {
@@ -18,6 +20,7 @@
 
 .link {
     width: 250px;
+    font-size: 14px;
 }
 
 .msgln {

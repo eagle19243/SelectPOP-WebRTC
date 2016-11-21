@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
     }
 });
 
-router.post('/', function(req, res){
+router.post('/', function(req, res) {
     session = req.session;
 
     var username = req.body.username;
@@ -22,6 +22,10 @@ router.post('/', function(req, res){
         session.username = username;
         session.password = password;
         res.render('success');
+    } else if (username = 'b'&& password == 'b') {
+        session.username = username;
+        session.password = password;
+        res.render('client');
     } else {
         res.render('fail');
     }
