@@ -5,3 +5,15 @@
     border-color: #AFAEAF;
     border-style: solid;
 }
+
+.chatBox {
+    widt: 640px;
+    height: 200px;
+    border: 1px;
+    border-color: #AFAEAF;
+    border-style: solid;
+}
+
+.stop_btn {
+
+}
