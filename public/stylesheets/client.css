@@ -1,0 +1,16 @@
+.videoview {
+    width: 640px;
+    height: 480px;
+    border: 1px;
+    border-color: #AFAEAF;
+    border-style: solid;
+}
+
+.clientChatBox {
+    width: 400px;
+    height: 480px;
+    border: 1px;
+    border-color: #AFAEAF;
+    border-style: solid;
+}
+
