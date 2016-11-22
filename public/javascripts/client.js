@@ -44,6 +44,7 @@ var peer_media_elements = {};  /* keep track of our <video>/<audio> tags, indexe
 function init() {
     console.log("Connecting to signaling server");
     signaling_socket = io.connect(SIGNALING_SERVER);
+
     signaling_socket.on('connect', function() {
         console.log("Connected to signaling server");
         setup_local_media(function() {
@@ -52,6 +53,7 @@ function init() {
             join_chat_channel(DEFAULT_CHANNEL, {'whatever-you-want-here': 'stuff'});
         });
     });
+
     signaling_socket.on('disconnect', function() {
         console.log("Disconnected from signaling server");
         /* Tear down all of our peer connections and remove all the
@@ -65,12 +67,15 @@ function init() {
         peers = {};
         peer_media_elements = {};
     });
+
     function join_chat_channel(channel, userdata) {
         signaling_socket.emit('join', {"channel": channel, "userdata": userdata});
     }
+
     function part_chat_channel(channel) {
         signaling_socket.emit('part', channel);
     }
+
     /**
      * When we join a group, our signaling server will send out 'addPeer' events to each pair
      * of users in the group (creating a fully-connected graph of users, ie if there are 6 people
@@ -226,7 +231,7 @@ function setup_local_media(callback, errorback) {
     /* Ask user for permission to use the computers microphone and/or camera,
      * attach it to an <audio> or <video> tag if they give us access. */
     console.log("Requesting access to local audio / video inputs");
-    getUserMedia({"audio":USE_AUDIO, "video":USE_VIDEO},
+    navigator.getUserMedia({"audio":USE_AUDIO, "video":USE_VIDEO},
         function(stream) { /* user accepted access to a/v */
             console.log("Access granted to audio/video");
             local_media_stream = stream;
