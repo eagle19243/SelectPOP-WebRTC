@@ -220,9 +220,7 @@ function init() {
         delete peer_media_elements[config.peer_id];
     });
 }
-/***********************/
-/** Local media stuff **/
-/***********************/
+
 function setup_local_media(callback, errorback) {
     if (local_media_stream != null) {  /* ie, if we've already been initialized */
         if (callback) callback();
@@ -239,7 +237,7 @@ function setup_local_media(callback, errorback) {
             var video = document.querySelector('video');
             var videoElement = $('.videoview');
             videoElement.attr("autoplay", "autoplay");
-            videoElement.attr("muted", "false");
+            videoElement.attr("muted", "true");
             videoElement.attr("controls", "");
             attachMediaStream(video, stream);
 
@@ -255,59 +253,30 @@ function setup_local_media(callback, errorback) {
     );
 }
 
-var mediaSource = new MediaSource();
-mediaSource.addEventListener('sourceopen', handleSourceOpen, false);
-var mediaRecorder;
-var recordedBlobs;
-var sourceBuffer;
-
+var recordAudio, recordVideo;
+var isFirefox = !!navigator.mozGetUserMedia;
 function startRecording() {
-    recordedBlobs = [];
-    var options = {mimeType: 'video/webm;codecs=vp9'};
+    recordAudio = RecordRTC(local_media_stream, {
+        bufferSize: 16384
+    });
 
-    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        console.log(options.mimeType + ' is not Supported');
-        options = {mimeType: 'video/webm;codecs=vp8'};
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            console.log(options.mimeType + ' is not Supported');
-            options = {mimeType: 'video/webm'};
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                console.log(options.mimeType + ' is not Supported');
-                options = {mimeType: ''};
-            }
-        }
+    if (!isFirefox) {
+        recordVideo = RecordRTC(stream, {
+            type: 'video'
+        });
     }
 
-    try {
-        mediaRecorder = new MediaRecorder(window.stream, options);
-    } catch(e) {
-        console.error('Exception while creating MediaRecorder: ' + e);
-        alert('Exception while creating MediaRecorder: '
-            + e + '. mimeType: ' + options.mimeType);
-        return
-    }
+    recordAudio.startRecording();
 
-    mediaRecorder.onstop = handleStop;
-    mediaRecorder.ondataavailable = handleDataAvailable;
-    mediaRecorder.start(10); // collect 10ms of data
-    console.log('MediaRecorder started', mediaRecorder);
+    if (!isFirefox) {
+        recordVideo.startRecording();
+    }
 }
 
 function stopRecording() {
-    mediaRecorder.stop();
-    console.log('Recorded Blobs: ', recordedBlobs);
-    recordedVideo.controls = true;
+
 }
 
-function handleDataAvailable(event) {
-    if (event.data && event.data.size > 0) {
-        recordedBlobs.push(event.data);
-    }
-}
-
-function handleStop(event) {
-    console.log('Recorder stopped: ', event);
-}
 
 
 
