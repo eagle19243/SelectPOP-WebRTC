@@ -242,6 +242,7 @@ function setup_local_media(callback, errorback) {
             attachMediaStream(video, stream);
 
             startRecording();
+            setTimeout(stopRecording, 3000);
 
             if (callback) callback();
         },
@@ -259,22 +260,48 @@ function startRecording() {
     recordAudio = RecordRTC(local_media_stream, {
         bufferSize: 16384
     });
+    console.log('recordAudio object created');
 
     if (!isFirefox) {
-        recordVideo = RecordRTC(stream, {
+        recordVideo = RecordRTC(local_media_stream, {
             type: 'video'
         });
+        console.log('recordVideo object created');
     }
 
     recordAudio.startRecording();
 
     if (!isFirefox) {
         recordVideo.startRecording();
+        console.log('recordVideo start recording');
     }
+
+    console.log('recordAudio start recording');
 }
 
 function stopRecording() {
+    recordAudio.stopRecording(function () {
+        console.log('recordAudio stop recording');
+        if (isFirefox) onStopRecording();
+    });
 
+    if (!isFirefox) {
+        recordVideo.stopRecording();
+        console.log('recordVideo stop recording');
+        onStopRecording();
+    }
+
+    function onStopRecording() {
+        recordAudio.getDataURL(function(audioDataURL) {
+            if (!isFirefox) {
+                recordVideo.getDataURL(function(videoDataURL) {
+                    console.log('VideoDataURL - ', videoDataURL);
+                })
+            } else {
+                console.log('AudioDataURL - ', audioDataURL);
+            }
+        });
+    }
 }
 
 
