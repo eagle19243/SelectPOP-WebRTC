@@ -242,8 +242,10 @@ function setup_local_media(callback, errorback) {
             $('body').append(local_media);
             attachMediaStream(local_media[0], stream);*/
 
-            var video = document.querySelector('video');
-            // video.src = window.URL.createObjectURL(stream);
+            var video = $('.videoview');
+            video.attr("autoplay", "autoplay");
+            video.attr("muted", "false");
+            video.attr("controls", "");
             attachMediaStream(video, stream);
 
 
