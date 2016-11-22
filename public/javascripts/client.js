@@ -235,12 +235,18 @@ function setup_local_media(callback, errorback) {
         function(stream) { /* user accepted access to a/v */
             console.log("Access granted to audio/video");
             local_media_stream = stream;
-            var local_media = USE_VIDEO ? $("<video>") : $("<audio>");
+            /*var local_media = USE_VIDEO ? $("<video>") : $("<audio>");
             local_media.attr("autoplay", "autoplay");
-            local_media.attr("muted", "true"); /* always mute ourselves by default */
+            local_media.attr("muted", "true"); /!* always mute ourselves by default *!/
             local_media.attr("controls", "");
             $('body').append(local_media);
-            attachMediaStream(local_media[0], stream);
+            attachMediaStream(local_media[0], stream);*/
+
+            var video = document.querySelector('video');
+            // video.src = window.URL.createObjectURL(stream);
+            attachMediaStream(video, stream);
+
+
             if (callback) callback();
         },
         function() { /* user denied access to a/v */
