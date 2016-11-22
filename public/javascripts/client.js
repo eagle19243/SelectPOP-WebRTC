@@ -1,8 +1,8 @@
 /**
  * Created by admin on 20/11/16.
  */
-var url = 'ws://selectpop.herokuapp.com';
-var connection = new WebSocket(url);
+// var url = 'http://selectpop.herokuapp.com:3000';
+// var connection = new WebSocket(url);
 var name = '';
 
 $(document).ready(function () {
@@ -11,7 +11,7 @@ $(document).ready(function () {
             || navigator.mozGetUserMedia;
 
         navigator.getUserMedia({ video: true, audio: true }, function (stream) {
-            var video = $('.videoview');
+            var video = document.querySelector('video');
 
             video.src = window.URL.createObjectURL(stream);
 
