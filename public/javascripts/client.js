@@ -1,7 +1,7 @@
 /**
  * Created by admin on 20/11/16.
  */
-var url = 'http://selectpop.herokuapp.com:3000';
+var url = 'ws://selectpop.herokuapp.com:3000';
 var connection = new WebSocket(url);
 var name = '';
 
