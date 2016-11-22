@@ -1,9 +1,11 @@
 /**
  * Created by admin on 20/11/16.
  */
-var url = 'wss://selectpop.herokuapp.com:3000';
-var connection = new WebSocket(url);
+var url = 'ws://selectpop.herokuapp.com:3000';
+var connection = io.connect(url);
 var name = '';
+
+connection.emit('login', {name:'a'});
 
 $(document).ready(function () {
     if (hasUserMedia()) {
