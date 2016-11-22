@@ -4,78 +4,89 @@
 
 
 var socketIO = require('socket.io');
-var users = {};
+var channels = {};
+var sockets = {};
 
 module.exports = function(server) {
     var io = socketIO.listen(server);
+    io.set('log level', 1);
 
     io.sockets.on('connection', function(socket) {
-        console.log("user connected");
 
-        socket.on('message', function(message) {
-            var data;
+        socket.channels = {};
+        sockets[socket.id] = socket;
+        console.log("[" + socket.id + "] connection accepted");
 
-            console.log('on_message');
-
-            try {
-                data = JSON.parse(message);
-            } catch (e) {
-                console.log("Invalid JSON");
-                data = {};
+        socket.on('disconnect', function() {
+            for (var channel in socket.channels) {
+                part(channel);
             }
 
-            switch (data.type) {
-                case 'login':
-                    console.log("User logged", data.name);
+            console.log("[" + socket.id + "] disconnected");
+            delete sockets[socket.id];
+        });
 
-                    if (users[data.name]) {
-                        sendTo(connection, {
-                           type: 'login',
-                            success: false
-                        });
-                    } else {
-                        users[data.name] = connection;
-                        connection.name = data.name;
+        socket.on('join', function (config) {
+            console.log("["+ socket.id + "] join ", config);
+            var channel = config.channel;
+            var userdata = config.userdata;
 
-                        sendTo(connection, {
-                            type: 'login',
-                            success: true
-                        });
-                    }
-
-                    break;
-                case 'offer':
-                    break;
-                case 'answer':
-                    break;
-                case 'candidate':
-                    break;
-                case 'leave':
-                    break;
-                default:
-                    sendTo(connection, {
-                        type: 'error',
-                        message: 'Command not found: ' + data.type
-                    });
-
-                    break;
+            if (channel in socket.channels) {
+                console.log("["+ socket.id + "] ERROR: already joined ", channel);
+                return;
             }
-        })
 
-        socket.on('close', function() {
-            console.log('on_close');
+            if (!(channel in channels)) {
+                channels[channel] = {};
+            }
 
-            if (connection.name) {
-                delete users[connection.name];
+            for (id in channels[channel]) {
+                channels[channel][id].emit('addPeer', {'peer_id': socket.id, 'should_create_offer': false});
+                socket.emit('addPeer', {'peer_id': id, 'should_create_offer': true});
+            }
 
-                if (connection.otherName) {
+            channels[channel][socket.id] = socket;
+            socket.channels[channel] = channel;
+        });
 
-                }
+        function part(channel) {
+            console.log("["+ socket.id + "] part ");
+
+            if (!(channel in socket.channels)) {
+                console.log("["+ socket.id + "] ERROR: not in ", channel);
+                return;
+            }
+
+            delete socket.channels[channel];
+            delete channels[channel][socket.id];
+
+            for (id in channels[channel]) {
+                channels[channel][id].emit('removePeer', {'peer_id': socket.id});
+                socket.emit('removePeer', {'peer_id': id});
+            }
+        }
+        socket.on('part', part);
+
+        socket.on('relayICECandidate', function(config) {
+            var peer_id = config.peer_id;
+            var ice_candidate = config.ice_candidate;
+            console.log("["+ socket.id + "] relaying ICE candidate to [" + peer_id + "] ", ice_candidate);
+
+            if (peer_id in sockets) {
+                sockets[peer_id].emit('iceCandidate', {'peer_id': socket.id, 'ice_candidate': ice_candidate});
             }
         });
+
+        socket.on('relaySessionDescription', function(config) {
+            var peer_id = config.peer_id;
+            var session_description = config.session_description;
+            console.log("["+ socket.id + "] relaying session description to [" + peer_id + "] ", session_description);
+
+            if (peer_id in sockets) {
+                sockets[peer_id].emit('sessionDescription', {'peer_id': socket.id, 'session_description': session_description});
+            }
+        });
+
     });
 }
 
-function sendTo(connection, message) {
-    connection.send(JSON.stringify(message));
-}
