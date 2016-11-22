@@ -11,7 +11,7 @@ $(document).ready(function () {
             || navigator.mozGetUserMedia;
 
         navigator.getUserMedia({ video: true, audio: true }, function (stream) {
-            var video = document.querySelector('video');
+            var video = $('.videoview');
 
             video.src = window.URL.createObjectURL(stream);
 
