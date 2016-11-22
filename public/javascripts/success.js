@@ -30,3 +30,15 @@ $(document).ready(function () {
     });
 
 });
+
+function sendMessage() {
+
+}
+
+function onUserConnected() {
+
+}
+
+function getOthersName() {
+
+}

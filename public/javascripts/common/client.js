@@ -45,28 +45,9 @@ function init() {
     console.log("Connecting to signaling server");
     signaling_socket = io.connect(SIGNALING_SERVER);
 
-    signaling_socket.on('connect', function() {
-        console.log("Connected to signaling server");
-        setup_local_media(function() {
-            /* once the user has given us access to their
-             * microphone/camcorder, join the channel and start peering up */
-            join_chat_channel(DEFAULT_CHANNEL, {'whatever-you-want-here': 'stuff'});
-        });
-    });
+    signaling_socket.on('connect', onConnected());
 
-    signaling_socket.on('disconnect', function() {
-        console.log("Disconnected from signaling server");
-        /* Tear down all of our peer connections and remove all the
-         * media divs when we disconnect */
-        for (peer_id in peer_media_elements) {
-            peer_media_elements[peer_id].remove();
-        }
-        for (peer_id in peers) {
-            peers[peer_id].close();
-        }
-        peers = {};
-        peer_media_elements = {};
-    });
+    signaling_socket.on('disconnect', onDisconnected());
 
     function join_chat_channel(channel, userdata) {
         signaling_socket.emit('join', {"channel": channel, "userdata": userdata});
@@ -303,6 +284,50 @@ function stopRecording() {
         });
     }
 }
+
+function onStartRecording() {
+
+}
+
+function onStopRecording() {
+
+}
+
+function onReceivedMessage() {
+
+}
+
+function upload() {
+
+}
+
+function getOthersName() {
+
+}
+
+function onConnected() {
+    console.log("Connected to signaling server");
+    setup_local_media(function() {
+        /* once the user has given us access to their
+         * microphone/camcorder, join the channel and start peering up */
+        join_chat_channel(DEFAULT_CHANNEL, {'whatever-you-want-here': 'stuff'});
+    });
+}
+
+function onDisconnected() {
+    console.log("Disconnected from signaling server");
+    /* Tear down all of our peer connections and remove all the
+     * media divs when we disconnect */
+    for (peer_id in peer_media_elements) {
+        peer_media_elements[peer_id].remove();
+    }
+    for (peer_id in peers) {
+        peers[peer_id].close();
+    }
+    peers = {};
+    peer_media_elements = {};
+}
+
 
 
 
