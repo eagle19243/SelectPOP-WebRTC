@@ -214,8 +214,8 @@ function setup_local_media(callback, errorback) {
             videoElement.attr("controls", "");
             attachMediaStream(video, stream);
 
-            startRecording();
-            setTimeout(stopRecording, 3000);
+            /*startRecording();
+            setTimeout(stopRecording, 3000);*/
 
             if (callback) callback();
         },
@@ -229,6 +229,7 @@ function setup_local_media(callback, errorback) {
 
 var recordAudio, recordVideo;
 var isFirefox = !!navigator.mozGetUserMedia;
+
 function startRecording() {
     recordAudio = RecordRTC(local_media_stream, {
         bufferSize: 16384
