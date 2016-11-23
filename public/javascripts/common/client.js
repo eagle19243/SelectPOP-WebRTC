@@ -29,7 +29,7 @@ function hasUserMedia() {
 var SIGNALING_SERVER = "";
 var USE_AUDIO = true;
 var USE_VIDEO = true;
-var DEFAULT_CHANNEL = 'some-global-channel-name';
+var DEFAULT_CHANNEL = 'selectpop demo project channel';
 var MUTE_AUDIO_BY_DEFAULT = false;
 /** You should probably use a different stun server doing commercial stuff **/
 /** Also see: https://gist.github.com/zziuni/3741933 **/
@@ -48,14 +48,6 @@ function init() {
     signaling_socket.on('connect', onConnected());
 
     signaling_socket.on('disconnect', onDisconnected());
-
-    function join_chat_channel(channel, userdata) {
-        signaling_socket.emit('join', {"channel": channel, "userdata": userdata});
-    }
-
-    function part_chat_channel(channel) {
-        signaling_socket.emit('part', channel);
-    }
 
     /**
      * When we join a group, our signaling server will send out 'addPeer' events to each pair
@@ -308,10 +300,19 @@ function getOthersName() {
 function onConnected() {
     console.log("Connected to signaling server");
     setup_local_media(function() {
+        console.log('set up local media successfully');
         /* once the user has given us access to their
          * microphone/camcorder, join the channel and start peering up */
         join_chat_channel(DEFAULT_CHANNEL, {'whatever-you-want-here': 'stuff'});
     });
+}
+
+function join_chat_channel(channel, userdata) {
+    signaling_socket.emit('join', {"channel": channel, "userdata": userdata});
+}
+
+function part_chat_channel(channel) {
+    signaling_socket.emit('part', channel);
 }
 
 function onDisconnected() {
@@ -327,6 +328,8 @@ function onDisconnected() {
     peers = {};
     peer_media_elements = {};
 }
+
+
 
 
 
