@@ -41,6 +41,7 @@ var signaling_socket = null;   /* our socket.io connection to our webserver */
 var local_media_stream = null; /* our own microphone / webcam */
 var peers = {};                /* keep track of our peer connections, indexed by peer_id (aka socket.io id) */
 var peer_media_elements = {};  /* keep track of our <video>/<audio> tags, indexed by peer_id */
+
 function init() {
     console.log("Connecting to signaling server");
     signaling_socket = io.connect(SIGNALING_SERVER);
@@ -55,121 +56,19 @@ function init() {
      * in the channel you will connect directly to the other 5, so there will be a total of 15
      * connections in the network).
      */
-    signaling_socket.on('addPeer', function(config) {
-        console.log('Signaling server said to add peer:', config);
-        var peer_id = config.peer_id;
-        if (peer_id in peers) {
-            /* This could happen if the user joins multiple channels where the other peer is also in. */
-            console.log("Already connected to peer ", peer_id);
-            return;
-        }
-        var peer_connection = new RTCPeerConnection(
-            {"iceServers": ICE_SERVERS},
-            {"optional": [{"DtlsSrtpKeyAgreement": true}]} /* this will no longer be needed by chrome
-             * eventually (supposedly), but is necessary
-             * for now to get firefox to talk to chrome */
-        );
-        peers[peer_id] = peer_connection;
-        peer_connection.onicecandidate = function(event) {
-            if (event.candidate) {
-                signaling_socket.emit('relayICECandidate', {
-                    'peer_id': peer_id,
-                    'ice_candidate': {
-                        'sdpMLineIndex': event.candidate.sdpMLineIndex,
-                        'candidate': event.candidate.candidate
-                    }
-                });
-            }
-        }
-        peer_connection.onaddstream = function(event) {
-            console.log("onAddStream", event);
-            var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
-            remote_media.attr("autoplay", "autoplay");
-            if (MUTE_AUDIO_BY_DEFAULT) {
-                remote_media.attr("muted", "true");
-            }
-            remote_media.attr("controls", "");
-            peer_media_elements[peer_id] = remote_media;
-            $('body').append(remote_media);
-            attachMediaStream(remote_media[0], event.stream);
-        }
-        /* Add our local stream */
-        peer_connection.addStream(local_media_stream);
-        /* Only one side of the peer connection should create the
-         * offer, the signaling server picks one to be the offerer.
-         * The other user will get a 'sessionDescription' event and will
-         * create an offer, then send back an answer 'sessionDescription' to us
-         */
-        if (config.should_create_offer) {
-            console.log("Creating RTC offer to ", peer_id);
-            peer_connection.createOffer(
-                function (local_description) {
-                    console.log("Local offer description is: ", local_description);
-                    peer_connection.setLocalDescription(local_description,
-                        function() {
-                            signaling_socket.emit('relaySessionDescription',
-                                {'peer_id': peer_id, 'session_description': local_description});
-                            console.log("Offer setLocalDescription succeeded");
-                        },
-                        function() { Alert("Offer setLocalDescription failed!"); }
-                    );
-                },
-                function (error) {
-                    console.log("Error sending offer: ", error);
-                });
-        }
-    });
+    signaling_socket.on('addPeer', onAddPeer());
     /**
      * Peers exchange session descriptions which contains information
      * about their audio / video settings and that sort of stuff. First
      * the 'offerer' sends a description to the 'answerer' (with type
      * "offer"), then the answerer sends one back (with type "answer").
      */
-    signaling_socket.on('sessionDescription', function(config) {
-        console.log('Remote description received: ', config);
-        var peer_id = config.peer_id;
-        var peer = peers[peer_id];
-        var remote_description = config.session_description;
-        console.log(config.session_description);
-        var desc = new RTCSessionDescription(remote_description);
-        var stuff = peer.setRemoteDescription(desc,
-            function() {
-                console.log("setRemoteDescription succeeded");
-                if (remote_description.type == "offer") {
-                    console.log("Creating answer");
-                    peer.createAnswer(
-                        function(local_description) {
-                            console.log("Answer description is: ", local_description);
-                            peer.setLocalDescription(local_description,
-                                function() {
-                                    signaling_socket.emit('relaySessionDescription',
-                                        {'peer_id': peer_id, 'session_description': local_description});
-                                    console.log("Answer setLocalDescription succeeded");
-                                },
-                                function() { Alert("Answer setLocalDescription failed!"); }
-                            );
-                        },
-                        function(error) {
-                            console.log("Error creating answer: ", error);
-                            console.log(peer);
-                        });
-                }
-            },
-            function(error) {
-                console.log("setRemoteDescription error: ", error);
-            }
-        );
-        console.log("Description Object: ", desc);
-    });
+    signaling_socket.on('sessionDescription', onSessionDescription());
     /**
      * The offerer will send a number of ICE Candidate blobs to the answerer so they
      * can begin trying to find the best path to one another on the net.
      */
-    signaling_socket.on('iceCandidate', function(config) {
-        var peer = peers[config.peer_id];
-        var ice_candidate = config.ice_candidate;
-        peer.addIceCandidate(new RTCIceCandidate(ice_candidate));
-    });
+    signaling_socket.on('iceCandidate', onIceCandidate);
     /**
      * When a user leaves a channel (or is disconnected from the
      * signaling server) everyone will recieve a 'removePeer' message
@@ -180,18 +79,7 @@ function init() {
      * signaling_socket.on('disconnect') code will kick in and tear down
      * all the peer sessions.
      */
-    signaling_socket.on('removePeer', function(config) {
-        console.log('Signaling server said to remove peer:', config);
-        var peer_id = config.peer_id;
-        if (peer_id in peer_media_elements) {
-            peer_media_elements[peer_id].remove();
-        }
-        if (peer_id in peers) {
-            peers[peer_id].close();
-        }
-        delete peers[peer_id];
-        delete peer_media_elements[config.peer_id];
-    });
+    signaling_socket.on('removePeer', onRemovePeer);
 }
 
 function setup_local_media(callback, errorback) {
@@ -328,6 +216,127 @@ function onDisconnected() {
     }
     peers = {};
     peer_media_elements = {};
+}
+
+function onAddPeer() {
+    console.log('Signaling server said to add peer:', config);
+    var peer_id = config.peer_id;
+    if (peer_id in peers) {
+        /* This could happen if the user joins multiple channels where the other peer is also in. */
+        console.log("Already connected to peer ", peer_id);
+        return;
+    }
+    var peer_connection = new RTCPeerConnection(
+        {"iceServers": ICE_SERVERS},
+        {"optional": [{"DtlsSrtpKeyAgreement": true}]} /* this will no longer be needed by chrome
+         * eventually (supposedly), but is necessary
+         * for now to get firefox to talk to chrome */
+    );
+    peers[peer_id] = peer_connection;
+    peer_connection.onicecandidate = function(event) {
+        if (event.candidate) {
+            signaling_socket.emit('relayICECandidate', {
+                'peer_id': peer_id,
+                'ice_candidate': {
+                    'sdpMLineIndex': event.candidate.sdpMLineIndex,
+                    'candidate': event.candidate.candidate
+                }
+            });
+        }
+    }
+    peer_connection.onaddstream = function(event) {
+        console.log("onAddStream", event);
+        var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
+        remote_media.attr("autoplay", "autoplay");
+        if (MUTE_AUDIO_BY_DEFAULT) {
+            remote_media.attr("muted", "true");
+        }
+        remote_media.attr("controls", "");
+        peer_media_elements[peer_id] = remote_media;
+        $('body').append(remote_media);
+        attachMediaStream(remote_media[0], event.stream);
+    }
+    /* Add our local stream */
+    peer_connection.addStream(local_media_stream);
+    /* Only one side of the peer connection should create the
+     * offer, the signaling server picks one to be the offerer.
+     * The other user will get a 'sessionDescription' event and will
+     * create an offer, then send back an answer 'sessionDescription' to us
+     */
+    if (config.should_create_offer) {
+        console.log("Creating RTC offer to ", peer_id);
+        peer_connection.createOffer(
+            function (local_description) {
+                console.log("Local offer description is: ", local_description);
+                peer_connection.setLocalDescription(local_description,
+                    function() {
+                        signaling_socket.emit('relaySessionDescription',
+                            {'peer_id': peer_id, 'session_description': local_description});
+                        console.log("Offer setLocalDescription succeeded");
+                    },
+                    function() { Alert("Offer setLocalDescription failed!"); }
+                );
+            },
+            function (error) {
+                console.log("Error sending offer: ", error);
+            });
+    }
+}
+
+function onSessionDescription() {
+    console.log('Remote description received: ', config);
+    var peer_id = config.peer_id;
+    var peer = peers[peer_id];
+    var remote_description = config.session_description;
+    console.log(config.session_description);
+    var desc = new RTCSessionDescription(remote_description);
+    var stuff = peer.setRemoteDescription(desc,
+        function() {
+            console.log("setRemoteDescription succeeded");
+            if (remote_description.type == "offer") {
+                console.log("Creating answer");
+                peer.createAnswer(
+                    function(local_description) {
+                        console.log("Answer description is: ", local_description);
+                        peer.setLocalDescription(local_description,
+                            function() {
+                                signaling_socket.emit('relaySessionDescription',
+                                    {'peer_id': peer_id, 'session_description': local_description});
+                                console.log("Answer setLocalDescription succeeded");
+                            },
+                            function() { Alert("Answer setLocalDescription failed!"); }
+                        );
+                    },
+                    function(error) {
+                        console.log("Error creating answer: ", error);
+                        console.log(peer);
+                    });
+            }
+        },
+        function(error) {
+            console.log("setRemoteDescription error: ", error);
+        }
+    );
+    console.log("Description Object: ", desc);
+}
+
+function onIceCandidate() {
+    var peer = peers[config.peer_id];
+    var ice_candidate = config.ice_candidate;
+    peer.addIceCandidate(new RTCIceCandidate(ice_candidate));
+}
+
+function onRemovePeer() {
+    console.log('Signaling server said to remove peer:', config);
+    var peer_id = config.peer_id;
+    if (peer_id in peer_media_elements) {
+        peer_media_elements[peer_id].remove();
+    }
+    if (peer_id in peers) {
+        peers[peer_id].close();
+    }
+    delete peers[peer_id];
+    delete peer_media_elements[config.peer_id];
 }
 
 
