@@ -15,6 +15,7 @@ module.exports = function(server) {
 
         socket.channels = {};
         sockets[socket.id] = socket;
+
         console.log("[" + socket.id + "] connection accepted");
 
         socket.on('disconnect', function() {
@@ -89,4 +90,5 @@ module.exports = function(server) {
 
     });
 }
+
 

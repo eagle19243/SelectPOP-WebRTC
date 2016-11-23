@@ -41,6 +41,7 @@ var signaling_socket = null;   /* our socket.io connection to our webserver */
 var local_media_stream = null; /* our own microphone / webcam */
 var peers = {};                /* keep track of our peer connections, indexed by peer_id (aka socket.io id) */
 var peer_media_elements = {};  /* keep track of our <video>/<audio> tags, indexed by peer_id */
+var dataChannel;
 
 function init() {
     console.log("Connecting to signaling server");
@@ -98,7 +99,13 @@ function init() {
              * eventually (supposedly), but is necessary
              * for now to get firefox to talk to chrome */
         );
+
         peers[peer_id] = peer_connection;
+
+        /*dataChannel = peer_connection.createDataChannel("textMessages", {reliable:false});*/
+        /*dataChannel.onopen = dataChannelStateChanged;*/
+        peer_connection.ondatachannel = receiveDataChannel;
+
         peer_connection.onicecandidate = function(event) {
             if (event.candidate) {
                 signaling_socket.emit('relayICECandidate', {
@@ -110,6 +117,7 @@ function init() {
                 });
             }
         }
+
         peer_connection.onaddstream = function(event) {
             console.log("onAddStream", event);
             var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
@@ -154,7 +162,7 @@ function init() {
      * the 'offerer' sends a description to the 'answerer' (with type
      * "offer"), then the answerer sends one back (with type "answer").
      */
-    signaling_socket.on('sessionDescription', function () {
+    signaling_socket.on('sessionDescription', function (config) {
         console.log('Remote description received: ', config);
         var peer_id = config.peer_id;
         var peer = peers[peer_id];
@@ -194,7 +202,7 @@ function init() {
      * The offerer will send a number of ICE Candidate blobs to the answerer so they
      * can begin trying to find the best path to one another on the net.
      */
-    signaling_socket.on('iceCandidate', function () {
+    signaling_socket.on('iceCandidate', function (config) {
         var peer = peers[config.peer_id];
         var ice_candidate = config.ice_candidate;
         peer.addIceCandidate(new RTCIceCandidate(ice_candidate));
@@ -314,6 +322,22 @@ function onReceivedMessage() {
 
 function upload() {
 
+}
+
+function dataChannelStateChanged() {
+    if (dataChannel.readyState === 'open') {
+        dataChannel.onmessage = receiveDataChannelMessage;
+    }
+}
+
+function receiveDataChannel(event) {
+    console.log('Received DataChannel');
+    dataChannel = event.channel;
+    dataChannel.onmessage = receiveDataChannelMessage;
+}
+
+function receiveDataChannelMessage(event) {
+    console.log(event.data);
 }
 
 

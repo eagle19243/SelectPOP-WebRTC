@@ -1,31 +1,26 @@
 /**
  * Created by admin on 20/11/16.
  */
-var SIGNALING_SERVER = "";
+var signaling_server = "";
 var DEFAULT_CHANNEL = 'selectpop demo project channel';
+var roomId = 'selectpop demo project channel';
 var ICE_SERVERS = [
     {url:"stun:stun.l.google.com:19302"}
 ];
 var signaling_socket = null;
 var peers = {};
 var peer_media_elements = {};
+var dataChannel;
+var username;
 
 
 $(document).ready(function () {
-    signaling_socket = io.connect(SIGNALING_SERVER);
+    signaling_socket = io.connect(signaling_server);
 
     signaling_socket.on('connect', function () {
         console.log("Connected to signaling server");
-        join_chat_channel(DEFAULT_CHANNEL, {'whatever-you-want-here': 'stuff'});
+
     });
-
-    function join_chat_channel(channel, userdata) {
-        signaling_socket.emit('join', {"channel": channel, "userdata": userdata});
-    }
-
-    function part_chat_channel(channel) {
-        signaling_socket.emit('part', channel);
-    }
 
     signaling_socket.on('disconnect', function () {
         console.log("Disconnected from signaling server");
@@ -50,9 +45,15 @@ $(document).ready(function () {
         }
         var peer_connection = new RTCPeerConnection(
             {"iceServers": ICE_SERVERS},
-            {"optional": [{"DtlsSrtpKeyAgreement": true}]}
+            {"optional": [{RtpDataChannels: true}]}
         );
+
         peers[peer_id] = peer_connection;
+
+        dataChannel = peer_connection.createDataChannel("textMessages", {reliable:false});
+        /*dataChannel.onopen = dataChannelStateChanged;*/
+        dataChannel.send("Hello");
+
         peer_connection.onicecandidate = function(event) {
             if (event.candidate) {
                 signaling_socket.emit('relayICECandidate', {
@@ -64,20 +65,8 @@ $(document).ready(function () {
                 });
             }
         }
-        peer_connection.onaddstream = function(event) {
-            console.log("onAddStream", event);
-            var remote_media = USE_VIDEO ? $("<video>") : $("<audio>");
-            remote_media.attr("autoplay", "autoplay");
-            if (MUTE_AUDIO_BY_DEFAULT) {
-                remote_media.attr("muted", "true");
-            }
-            remote_media.attr("controls", "");
-            peer_media_elements[peer_id] = remote_media;
-            $('body').append(remote_media);
-            attachMediaStream(remote_media[0], event.stream);
-        }
 
-        peer_connection.addStream(local_media_stream);
+
 
         if (config.should_create_offer) {
             console.log("Creating RTC offer to ", peer_id);
@@ -112,7 +101,14 @@ $(document).ready(function () {
         delete peer_media_elements[config.peer_id];
     });
 
-    var username;
+    function join_chat_channel(channel, userdata) {
+        signaling_socket.emit('join', {"channel": channel, "userdata": userdata});
+    }
+
+    function part_chat_channel(channel) {
+        signaling_socket.emit('part', channel);
+    }
+
 
     $.post('/user/getUsername', function(result) {
         username = result;
@@ -120,7 +116,10 @@ $(document).ready(function () {
 
     /*--------------Generate Link button Handler-------------*/
     $('.generateLink').click(function () {
-        $('.link').val('http://dev.selectpop.com/');
+        roomId = generateRoomId();
+        console.log('RoomId', roomId);
+        $('.link').val('http://dev.selectpop.com/' + roomId);
+        join_chat_channel(DEFAULT_CHANNEL, {'whatever-you-want-here': 'stuff'});
     });
 
     /*--------------MessageBox KeyDown Handler-------------*/
@@ -135,12 +134,25 @@ $(document).ready(function () {
             console.log($('.chatBox').html());
             $('.msgBox').val('');
             event.preventDefault();
+
+            sendMessage($('.msgBox').val());
         }
     });
 
 });
 
-function sendMessage() {
+function generateRoomId() {
+    var roomId = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < 10; i++) {
+        roomId += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
 
+    return roomId;
 }
+
+function sendMessage(msg) {
+    dataChannel.send(msg);
+}
+
 
