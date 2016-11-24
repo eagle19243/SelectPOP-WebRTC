@@ -43,6 +43,8 @@
 
     var socket = io(),
         chatMessage,
+        newMessage,
+        lastMessage,
         chatBox,
         room,
         peerConnection,
