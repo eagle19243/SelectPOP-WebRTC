@@ -186,7 +186,7 @@
         startRecording : function(stream) {
             console.log('startRecording');
             mediaRecorder = new MediaStreamRecorder(stream);
-            mediaRecorder.mimeType = 'video/webm';
+            mediaRecorder.recorderType = MediaRecorderWrapper;
             mediaRecorder.videoWidth = 320;
             mediaRecorder.videoHeight = 240;
             mediaRecorder.start();
