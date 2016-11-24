@@ -191,7 +191,7 @@
         //Handers---------------------------------------------
         $('.generateLink').click(function () {
             console.log('RoomId', room);
-            $('.link').val('https://localhost:3000/?room=' + room);
+            $('.link').val('https://selectpop.herokuapp.com/?room=' + room);
         });
 
         $('.chatBox').keyup(function (event) {
