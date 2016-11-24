@@ -200,7 +200,11 @@
             if (event.which == 13) {
 
                 newMessage = chatBox.val();
-                chatMessage = newMessage.substr(lastMessage.length, newMessage.length);
+
+                var from = (lastMessage == null)? 0: lastMessage.length;
+                var to = newMessage.length;
+
+                chatMessage = newMessage.substr(from, to);
 
                 Functions.sendChat(chatMessage);
 
