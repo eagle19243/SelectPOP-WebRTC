@@ -3,8 +3,10 @@
         chatMessage,
         chatBox,
         room,
+        status,
         localStream,
         localVideo,
+        mediaRecorder,
         peerConnection,
         peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
         
@@ -82,6 +84,8 @@
         getUserMediaSuccess : function(stream) {
             console.log('getUserMediaSuccess');
             localStream = stream;
+
+            localVideo.controls = ture;
             localVideo.src = Functions.createObjectURL(stream);
         },
 
@@ -174,25 +178,41 @@
             });
         },
 
+        startRecording : function(stream) {
+            mediaRecorder = new MediaStreamRecorder(stream);
+            mediaRecorder.mimeType = 'video/webm';
+            mediaRecorder.videoWidth = 320;
+            mediaRecorder.videoHeight = 240;
+            mediaRecorder.start(3000);
+            mediaRecorder.ondataavailable = function(blob) {
+                console.log('MediaRecorder onDataAvailable');
+                var downloadLink = URL.createObjectURL(blob);
+            };
+        },
+
+        stopRecording : function () {
+            mediaRecorder.stop()
+            mediaRecorder.save();
+        },
+
         welcome : function(message) {
             console.log("Ask someone to join you. Your id is: " + message);
             Functions.makeConnection();
         },
 
         connected : function(message) {
-            console.log('Connected');
+            status.val('Connected');
         },
 
         disconnected : function(message) {
-            console.log('Disconnected');
+            status.val('Disconnected');
         },
 
         makeConnection : function () {
-            console.log('MakeConnection');
             socket.emit('makeConnection', room);
         },
 
-        toast: function (notification) {
+        toast : function (notification) {
             console.log(notification);
         },
 
@@ -205,6 +225,7 @@
         localVideo = document.getElementsByTagName('video')[0];
         chatBox = $('.chatBox');
         room = $('.room').val();
+        status = $('.status');
 
         Functions.init();
         Functions.pageReady();

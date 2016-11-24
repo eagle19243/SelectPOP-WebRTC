@@ -5,8 +5,9 @@
         <link rel='stylesheet' href='/stylesheets/style.css' />
         <link rel='stylesheet' href='/stylesheets/client.css' />
 
-        <script src = '/javascripts/jquery-1.8.0.js'></script>
         <script src = 'https://www.webrtc-experiment.com/RecordRTC.js'></script>
+        <script src = 'https://cdn.webrtc-experiment.com/MediaStreamRecorder.js'></script>
+        <script src = '/javascripts/jquery-1.8.0.js'></script>
         <script src = '/javascripts/voicerss-tts.min.js'></script>
         <script src = '/javascripts/socket.io.js'></script>
         <script src = '/javascripts/client.js'></script>
@@ -15,12 +16,17 @@
     <body>
         <table>
             <tr>
+                <input type = 'text' class = 'status' readonly>
+            </tr>
+            <tr>
                 <td>
                     <video class = 'videoview' id  = 'localvideo' autoplay></video>
                 </td>
+
                 <td>
                     <textarea class = 'chatBox' placeholder="You have no received message." readonly></textarea>
                 </td>
+
             </tr>
             <tr>
                 <td align = 'center'>

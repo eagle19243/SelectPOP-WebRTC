@@ -46,6 +46,7 @@
         newMessage,
         lastMessage,
         chatBox,
+        status,
         room,
         peerConnection,
         peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
@@ -157,11 +158,11 @@
         },
 
         connected : function(message) {
-            console.log('Connected');
+            status.val('Connected');
         },
 
         disconnected : function(message) {
-            console.log('Disconnected');
+            status.val('Disconnected');
         },
 
         makeConnection : function() {
@@ -186,6 +187,7 @@
 
     $(document).ready(function() {
         chatBox = $('.chatBox');
+        status = $('.status');
 
         Functions.init();
         Functions.pageReady();
