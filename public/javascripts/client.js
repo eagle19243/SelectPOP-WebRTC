@@ -3,6 +3,7 @@
         chatMessage,
         chatBox,
         room,
+        localStream,
         localVideo,
         peerConnection,
         peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
@@ -29,10 +30,6 @@
             localVideo = $('#localvideo');
             chatBox = $('.chatBox');
             room = $('.room').val();
-
-            console.log(room);
-
-            console.log('hidden value room', room);
 
             socket.on('message', function(msg) {
                 Functions.gotMessageFromServer(msg);
@@ -121,22 +118,22 @@
                     Functions.toast("gotDescription Error");
                 });
         },
+
         gotIceCandidate : function(event) {
             if(event.candidate != null) {
                 socket.emit('message', JSON.stringify({'ice': event.candidate}));
             }
         },
+
         gotRemoteStream : function(event) {
-            console.log("got remote stream");
-            remoteVideo.src = windowObject.URL.createObjectURL(event.stream);
-            startButton.val("Connected");
-            Functions.toast("You are in a call!!")
-            startButton.prop('disabled', true);
+
         },
+
         createOfferError : function(error) {
             console.log(error);
             Functions.toast("Error occured: createOfferError");
         },
+
         gotMessageFromServer : function(message) {
             //console.log("From server" + message);
             if(!peerConnection) {
@@ -165,7 +162,7 @@
 
         appendChat : function(chat) {
             var prevMessage = chatBox.val();
-            chatBox.val(chat);
+            chatBox.val(prevMessage + '\n' + chat);
         },
 
         playMessage : function(msg) {
