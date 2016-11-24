@@ -85,7 +85,7 @@
             console.log('getUserMediaSuccess');
             localStream = stream;
 
-            localVideo.controls = ture;
+            localVideo.controls = truse;
             localVideo.src = Functions.createObjectURL(stream);
         },
 
