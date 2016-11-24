@@ -85,7 +85,7 @@
             console.log('getUserMediaSuccess');
             localStream = stream;
 
-            localVideo.controls = truse;
+            localVideo.controls = true;
             localVideo.src = Functions.createObjectURL(stream);
         },
 
