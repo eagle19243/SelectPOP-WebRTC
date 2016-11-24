@@ -9,6 +9,7 @@
         
     var voice_rss_key = '3255bee5bc4c44b58e5dfd0639226486';
 
+
     navigatorObject.getUserMedia = navigatorObject.getUserMedia ||
         navigatorObject.mozGetUserMedia ||
         navigatorObject.webkitGetUserMedia;
@@ -72,11 +73,14 @@
         },
 
         createObjectURL : function(file) {
-            if ( windowObject.webkitURL ) {
-                return windowObject.webkitURL.createObjectURL( file );
+            if ( windowObject.URL) {
+                console.log('WindowObject.URL - 0');
+                return windowObject.URL.createObjectURL( file );
             } else if ( windowObject.URL && windowObject.URL.createObjectURL ) {
+                console.log('WindowObject.URL - 1');
                 return windowObject.URL.createObjectURL( file );
             } else {
+                console.log('WindowObject.URL - 2');
                 return null;
             }
         },

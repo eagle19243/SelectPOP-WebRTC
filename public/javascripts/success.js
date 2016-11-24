@@ -197,8 +197,12 @@
 
             if (event.which == 13) {
 
-                chatMessage = chatBox.val();
+                newMessage = chatBox.val();
+                chatMessage = newMessage.substr(lastMessage.length, newMessage.length);
+
                 Functions.sendChat(chatMessage);
+
+                lastMessage = chatBox.val();
 
                 event.preventDefault();
 
