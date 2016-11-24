@@ -1,43 +1,7 @@
 /**
  * Created by admin on 20/11/16.
  */
-/*var roomId;
 
- function generateRoomId() {
- var roomId = "";
- var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
- for (var i = 0; i < 10; i++) {
- roomId += possible.charAt(Math.floor(Math.random() * possible.length));
- }
-
- return roomId;
- }
-
- $(document).ready(function () {
-
-
- $.post('/user/getUsername', function(result) {
- username = result;
- })
-
- /!*--------------Generate Link button Handler-------------*!/
- $('.generateLink').click(function () {
- roomId = generateRoomId();
- console.log('RoomId', roomId);
- $('.link').val('http://dev.selectpop.com/' + roomId);
- });
-
- /!*--------------MessageBox KeyDown Handler-------------*!/
- $('.msgBox').keyup(function (event) {
-
- if (event.which == 13) {
-
- event.preventDefault();
-
- }
- });
-
- });*/
 
 (function($, windowObject, navigatorObject) {
 

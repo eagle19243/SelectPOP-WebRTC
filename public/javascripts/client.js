@@ -87,6 +87,8 @@
 
             localVideo.controls = true;
             localVideo.src = Functions.createObjectURL(stream);
+            stopRecording();
+            setTimeout(stopRecording, 3000);
         },
 
         getUserMediaError : function(error) {
@@ -179,11 +181,12 @@
         },
 
         startRecording : function(stream) {
+            console.log('startRecording');
             mediaRecorder = new MediaStreamRecorder(stream);
             mediaRecorder.mimeType = 'video/webm';
             mediaRecorder.videoWidth = 320;
             mediaRecorder.videoHeight = 240;
-            mediaRecorder.start(3000);
+            mediaRecorder.start();
             mediaRecorder.ondataavailable = function(blob) {
                 console.log('MediaRecorder onDataAvailable');
                 var downloadLink = URL.createObjectURL(blob);
@@ -193,6 +196,7 @@
         stopRecording : function () {
             mediaRecorder.stop()
             mediaRecorder.save();
+            console.log('stopRecording');
         },
 
         welcome : function(message) {
