@@ -27,9 +27,6 @@
     var Functions = {
 
         pageReady : function() {
-            localVideo = $('#localvideo');
-            chatBox = $('.chatBox');
-            room = $('.room').val();
 
             socket.on('message', function(msg) {
                 Functions.gotMessageFromServer(msg);
@@ -162,7 +159,7 @@
 
         appendChat : function(chat) {
             var prevMessage = chatBox.val();
-            chatBox.val(prevMessage + '\n' + chat);
+            chatBox.val(prevMessage + chat);
         },
 
         playMessage : function(msg) {
@@ -205,6 +202,10 @@
     };
 
     $(document).ready(function() {
+        localVideo = document.getElementsByTagName('video')[0];
+        chatBox = $('.chatBox');
+        room = $('.room').val();
+
         Functions.init();
         Functions.pageReady();
     });

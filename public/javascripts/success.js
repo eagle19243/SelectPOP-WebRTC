@@ -65,7 +65,6 @@
 
     var Functions = {
         pageReady : function() {
-            chatBox = $('.chatBox');
             
             socket.on('message', function(msg) {
                 Functions.gotMessageFromServer(msg);
@@ -186,6 +185,8 @@
     };
 
     $(document).ready(function() {
+        chatBox = $('.chatBox');
+
         Functions.init();
         Functions.pageReady();
 
