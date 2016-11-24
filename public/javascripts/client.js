@@ -1,52 +1,13 @@
-/**
- * Created by admin on 20/11/16.
- */
-/*var roomId;
-
- function generateRoomId() {
- var roomId = "";
- var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
- for (var i = 0; i < 10; i++) {
- roomId += possible.charAt(Math.floor(Math.random() * possible.length));
- }
-
- return roomId;
- }
-
- $(document).ready(function () {
-
-
- $.post('/user/getUsername', function(result) {
- username = result;
- })
-
- /!*--------------Generate Link button Handler-------------*!/
- $('.generateLink').click(function () {
- roomId = generateRoomId();
- console.log('RoomId', roomId);
- $('.link').val('http://dev.selectpop.com/' + roomId);
- });
-
- /!*--------------MessageBox KeyDown Handler-------------*!/
- $('.msgBox').keyup(function (event) {
-
- if (event.which == 13) {
-
- event.preventDefault();
-
- }
- });
-
- });*/
-
 (function($, windowObject, navigatorObject) {
-
     var socket = io(),
         chatMessage,
         chatBox,
         room,
+        localVideo,
         peerConnection,
         peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
+        
+    var voice_rss_key = '3255bee5bc4c44b58e5dfd0639226486';
 
     navigatorObject.getUserMedia = navigatorObject.getUserMedia ||
         navigatorObject.mozGetUserMedia ||
@@ -62,39 +23,77 @@
         windowObject.webkitRTCSessionDescription;
 
     var Functions = {
+
         pageReady : function() {
+            localVideo = $('.videoview');
             chatBox = $('.chatBox');
-            
+            room = $('.room').val();
+
+            console.log(room);
+
+            console.log('hidden value room', room);
+
             socket.on('message', function(msg) {
                 Functions.gotMessageFromServer(msg);
             });
 
             socket.on('chatMessage', function(msg){
-                console.log('received chat Message', msg);
-                Functions.appendChat('Friend: ' + msg);
-                Functions.playMessage(msg);
+                console.log('received chatMessage', msg);
+                Functions.appendChat(msg);
             });
 
             socket.on('welcome', function(msg) {
                 Functions.welcome(msg);
             });
-
             socket.on('disconnected', function(msg) {
                 Functions.disconnected(msg);
             });
-
             socket.on('connected', function(msg) {
                 Functions.connected(msg);
             });
-
             socket.on('toast', function(notification) {
                 Functions.toast(notification);
             });
+
+            var constraints = {
+                video: true,
+                audio: true,
+            };
+
+            if(navigatorObject.getUserMedia) {
+                navigatorObject.getUserMedia(constraints,
+                    Functions.getUserMediaSuccess,
+                    Functions.getUserMediaError
+                );
+            } else {
+                alert('Your browser does not support getUserMedia API');
+            }
+        },
+
+        createObjectURL : function(file) {
+            if ( windowObject.webkitURL ) {
+                return windowObject.webkitURL.createObjectURL( file );
+            } else if ( windowObject.URL && windowObject.URL.createObjectURL ) {
+                return windowObject.URL.createObjectURL( file );
+            } else {
+                return null;
+            }
+        },
+
+        getUserMediaSuccess : function(stream) {
+            localStream = stream;
+            localVideo.src = Functions.createObjectURL(stream);
+        },
+
+        getUserMediaError : function(error) {
+            console.log(error);
+            Functions.toast("getUserMedia Error");
         },
 
         start : function(isCaller) {
-            Functions.toast('start called');
-
+            console.log("start called");
+            startButton.val("Calling");
+            Functions.toast("calling... Please Wait!!");
             peerConnection = new RTCPeerConnection(peerConnectionConfig);
             peerConnection.onicecandidate = Functions.gotIceCandidate;
             peerConnection.onaddstream = Functions.gotRemoteStream;
@@ -103,6 +102,7 @@
                 peerConnection.createOffer(Functions.gotDescription, Functions.createOfferError);
                 console.log("offer created");
             }
+            startButton.prop('disabled', true);
         },
 
         gotDescription : function(description) {
@@ -120,12 +120,17 @@
                 socket.emit('message', JSON.stringify({'ice': event.candidate}));
             }
         },
-
+        gotRemoteStream : function(event) {
+            console.log("got remote stream");
+            remoteVideo.src = windowObject.URL.createObjectURL(event.stream);
+            startButton.val("Connected");
+            Functions.toast("You are in a call!!")
+            startButton.prop('disabled', true);
+        },
         createOfferError : function(error) {
             console.log(error);
             Functions.toast("Error occured: createOfferError");
         },
-
         gotMessageFromServer : function(message) {
             //console.log("From server" + message);
             if(!peerConnection) {
@@ -147,13 +152,31 @@
             }
         },
 
-        sendChat : function(msg) {
-            socket.emit('chatMessage', msg);
+        createAnswerError : function() {
+            console.log("createAnswerError");
+            Functions.toast("Error occured: createAnswerError");
+        },
+
+        appendChat : function(chat) {
+            var prevMessage = chatBox.val();
+            chatBox.val(chat);
+        },
+
+        playMessage : function(msg) {
+            VoiceRSS.speech({
+                key: voice_rss_key,
+                src: msg,
+                hl: 'en-us',
+                r: 0,
+                c: 'mp3',
+                f: '44khz_16bit_stereo',
+                ssml:false
+            });
         },
 
         welcome : function(message) {
-            room = message;
-            console.log('Ask someone to join you. Your id is:', message);
+            console.log("Ask someone to join you. Your id is: " + message);
+            Functions.makeConnection();
         },
 
         connected : function(message) {
@@ -161,25 +184,19 @@
         },
 
         disconnected : function(message) {
-            console.log('Disconnected');
+            Console.log('Disconnected');
         },
 
-        makeConnection : function() {
-            /*var id = $("#makeConnectionInputField").val();
-            if(id.length == 22) {
-                socket.emit('makeConnection', id);
-            }
-            else {
-                console.log("enter valid id");
-                Functions.toast("enter valid id");
-            }*/
-
+        makeConnection : function () {
             console.log('MakeConnection');
+            socket.emit('makeConnection', room);
         },
-        toast : function(notification) {
+
+        toast: function (notification) {
             console.log(notification);
         },
-        init : function() {
+
+        init : function () {
             console.log('init');
         }
     };
@@ -187,28 +204,9 @@
     $(document).ready(function() {
         Functions.init();
         Functions.pageReady();
-
-        //Handers---------------------------------------------
-        $('.generateLink').click(function () {
-            console.log('RoomId', room);
-            $('.link').val('https://localhost:3000/?room=' + room);
-        });
-
-        $('.chatBox').keyup(function (event) {
-
-            if (event.which == 13) {
-
-                chatMessage = chatBox.val();
-                Functions.sendChat(chatMessage);
-
-                event.preventDefault();
-
-            }
-        });
     });
 
+    //Handers---------------------------------------------
+
+
 }(jQuery, window, navigator));
-
-
-
-

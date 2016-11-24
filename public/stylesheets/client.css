@@ -6,11 +6,9 @@
     border-style: solid;
 }
 
-.clientChatBox {
+.chatBox {
     width: 400px;
     height: 480px;
-    border: 1px;
-    border-color: #AFAEAF;
-    border-style: solid;
+    font-size: 14px;
 }
 
