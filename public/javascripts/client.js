@@ -87,8 +87,11 @@
 
             localVideo.controls = true;
             localVideo.src = Functions.createObjectURL(stream);
-            stopRecording();
-            setTimeout(stopRecording, 3000);
+            Functions.startRecording(stream);
+
+            setTimeout(function() {
+                Functions.stopRecording();
+            }, 3000);
         },
 
         getUserMediaError : function(error) {
