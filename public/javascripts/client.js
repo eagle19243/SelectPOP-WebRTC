@@ -26,7 +26,7 @@
     var Functions = {
 
         pageReady : function() {
-            localVideo = $('.videoview');
+            localVideo = $('.localvideo');
             chatBox = $('.chatBox');
             room = $('.room').val();
 
