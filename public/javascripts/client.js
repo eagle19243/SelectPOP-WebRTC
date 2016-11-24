@@ -197,7 +197,7 @@
         },
 
         stopRecording : function () {
-            mediaRecorder.stop()
+            mediaRecorder.stop();
             mediaRecorder.save();
             console.log('stopRecording');
         },
