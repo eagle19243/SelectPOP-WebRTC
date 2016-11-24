@@ -40,6 +40,7 @@
             socket.on('chatMessage', function(msg){
                 console.log('received chatMessage', msg);
                 Functions.appendChat(msg);
+                Functions.playMessage(msg);
             });
 
             socket.on('welcome', function(msg) {
@@ -81,12 +82,13 @@
         },
 
         getUserMediaSuccess : function(stream) {
+            console.log('getUserMediaSuccess');
             localStream = stream;
             localVideo.src = Functions.createObjectURL(stream);
         },
 
         getUserMediaError : function(error) {
-            console.log(error);
+            console.log('getUserMediaError', error);
             Functions.toast("getUserMedia Error");
         },
 
@@ -184,7 +186,7 @@
         },
 
         disconnected : function(message) {
-            Console.log('Disconnected');
+            console.log('Disconnected');
         },
 
         makeConnection : function () {

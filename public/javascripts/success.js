@@ -72,7 +72,6 @@
             socket.on('chatMessage', function(msg){
                 console.log('received chat Message', msg);
                 Functions.appendChat('Friend: ' + msg);
-                Functions.playMessage(msg);
             });
 
             socket.on('welcome', function(msg) {
