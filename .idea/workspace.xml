@@ -4,7 +4,6 @@
     <list default="true" id="08af0536-4ba3-467a-8726-d3eb35394846" name="Default" comment="changed some features&#10;- send message&#10;- record video/audio&#10;">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/client.js" afterPath="$PROJECT_DIR$/public/javascripts/client.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/success.js" afterPath="$PROJECT_DIR$/public/javascripts/success.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -60,8 +59,8 @@
       <file leaf-file-name="client.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/client.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="48">
-              <caret line="88" column="39" lean-forward="true" selection-start-line="88" selection-start-column="39" selection-end-line="88" selection-end-column="39" />
+            <state relative-caret-position="570">
+              <caret line="248" column="33" lean-forward="false" selection-start-line="248" selection-start-column="33" selection-end-line="248" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -206,7 +205,6 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="4" />
     <option name="y" value="23" />
     <option name="width" value="1596" />
     <option name="height" value="877" />
@@ -482,14 +480,7 @@
       <workItem from="1479989577725" duration="335000" />
       <workItem from="1479990317849" duration="19914000" />
       <workItem from="1480127905436" duration="650000" />
-      <workItem from="1480129974273" duration="3437000" />
-    </task>
-    <task id="LOCAL-00020" summary="First Commit">
-      <created>1479785770425</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1479785770425</updated>
+      <workItem from="1480129974273" duration="6485000" />
     </task>
     <task id="LOCAL-00021" summary="First Commit">
       <created>1479785885134</created>
@@ -827,11 +818,18 @@
       <option name="project" value="LOCAL" />
       <updated>1480134923474</updated>
     </task>
-    <option name="localTasksCounter" value="69" />
+    <task id="LOCAL-00069" summary="changed some features&#10;- send message&#10;- record video/audio&#10;">
+      <created>1480139744575</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1480139744575</updated>
+    </task>
+    <option name="localTasksCounter" value="70" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="179525000" />
+    <option name="totallyTimeSpent" value="182573000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -843,7 +841,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="4" y="23" width="1596" height="877" extended-state="0" />
+    <frame x="0" y="23" width="1596" height="877" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30730158" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1069,8 +1067,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/client.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="48">
-          <caret line="88" column="39" lean-forward="true" selection-start-line="88" selection-start-column="39" selection-end-line="88" selection-end-column="39" />
+        <state relative-caret-position="570">
+          <caret line="248" column="33" lean-forward="false" selection-start-line="248" selection-start-column="33" selection-end-line="248" selection-end-column="33" />
           <folding />
         </state>
       </provider>

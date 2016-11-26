@@ -7,6 +7,7 @@
         localStream,
         localVideo,
         mediaRecorder,
+        recordedBlobs,
         peerConnection,
         peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
         
@@ -85,7 +86,7 @@
             console.log('getUserMediaSuccess');
             localStream = stream;
 
-            localVideo.controls = true;
+            localVideo.controls = false;
             localVideo.muted = 'muted';
             localVideo.src = Functions.createObjectURL(stream);
             Functions.startRecording(stream);
@@ -187,21 +188,65 @@
 
         startRecording : function(stream) {
             console.log('startRecording');
-            /*mediaRecorder = new MediaStreamRecorder(stream);
-            mediaRecorder.recorderType = MediaRecorderWrapper;
+            recordedBlobs = [];
+
+            var options = {mimeType: 'video/webm;codecs=vp9'};
+
+            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                console.log(options.mimeType + ' is not Supported');
+                options = {mimeType: 'video/webm;codecs=vp8'};
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                    console.log(options.mimeType + ' is not Supported');
+                    options = {mimeType: 'video/webm'};
+                    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+                        console.log(options.mimeType + ' is not Supported');
+                        options = {mimeType: ''};
+                    }
+                }
+            }
+            try {
+                mediaRecorder = new MediaStreamRecorder(stream, options);
+            } catch(e) {
+                console.log('Exception while creating MediarRecorder: ' + e);
+            }
+
+            /*mediaRecorder.recorderType = MediaRecorderWrapper;
             mediaRecorder.videoWidth = 320;
-            mediaRecorder.videoHeight = 240;
-            mediaRecorder.start();
-            mediaRecorder.ondataavailable = function(blob) {
-                console.log('MediaRecorder onDataAvailable');
-                var downloadLink = URL.createObjectURL(blob);
-            };*/
+            mediaRecorder.videoHeight = 240;*/
+            mediaRecorder.start(10);
+            console.log('MediaRecorder started');
+
+            mediaRecorder.ondataavailable = function(event) {
+                /*console.log('MediaRecorder onDataAvailable');
+                var downloadLink = URL.createObjectURL(blob);*/
+
+                if (event.data && event.data.size > 0) {
+                    recordedBlobs.push(event.data);
+                }
+            };
+        },
+
+        download : function() {
+            var blob = new Blob(recordedBlobs, {type: 'video/webm'});
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'text.webm';
+            $(document).body.appendChild(a);
+            a.click();
+
+            setTimeout(function() {
+                document.body.removeChild(a);
+                windowObject.URL.revokeObjectURL(url);
+            }, 100);
         },
 
         stopRecording : function () {
-            /*mediaRecorder.stop();
-            mediaRecorder.save();*/
+            mediaRecorder.stop();
+            /*mediaRecorder.save();*/
             console.log('stopRecording');
+            Functions.download();
         },
 
         welcome : function(message) {
