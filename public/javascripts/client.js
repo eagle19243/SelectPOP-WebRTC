@@ -86,6 +86,7 @@
             localStream = stream;
 
             localVideo.controls = true;
+            localVideo.muted = 'muted';
             localVideo.src = Functions.createObjectURL(stream);
             Functions.startRecording(stream);
 
@@ -101,7 +102,7 @@
 
         start : function(isCaller) {
             console.log("start called");
-            startButton.val("Calling");
+
             Functions.toast("calling... Please Wait!!");
             peerConnection = new RTCPeerConnection(peerConnectionConfig);
             peerConnection.onicecandidate = Functions.gotIceCandidate;
@@ -111,7 +112,7 @@
                 peerConnection.createOffer(Functions.gotDescription, Functions.createOfferError);
                 console.log("offer created");
             }
-            startButton.prop('disabled', true);
+
         },
 
         gotDescription : function(description) {
@@ -186,7 +187,7 @@
 
         startRecording : function(stream) {
             console.log('startRecording');
-            mediaRecorder = new MediaStreamRecorder(stream);
+            /*mediaRecorder = new MediaStreamRecorder(stream);
             mediaRecorder.recorderType = MediaRecorderWrapper;
             mediaRecorder.videoWidth = 320;
             mediaRecorder.videoHeight = 240;
@@ -194,12 +195,12 @@
             mediaRecorder.ondataavailable = function(blob) {
                 console.log('MediaRecorder onDataAvailable');
                 var downloadLink = URL.createObjectURL(blob);
-            };
+            };*/
         },
 
         stopRecording : function () {
-            mediaRecorder.stop();
-            mediaRecorder.save();
+            /*mediaRecorder.stop();
+            mediaRecorder.save();*/
             console.log('stopRecording');
         },
 

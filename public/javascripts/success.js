@@ -102,6 +102,7 @@
                         peerConnection.createAnswer(Functions.gotDescription, Functions.createAnswerError);
                         console.log("answer created");
                     },
+
                     function() {
                         console.log("setRemoteDescription error");
                         Functions.toast("Error occured: setRemoteDescriptionError");
