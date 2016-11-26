@@ -8,6 +8,7 @@
         localVideo,
         mediaRecorder,
         recordedBlobs,
+        downloadlink,
         peerConnection,
         peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
         
@@ -229,12 +230,11 @@
         download : function() {
             var blob = new Blob(recordedBlobs, {type: 'video/webm'});
             var url = windowObject.URL.createObjectURL(blob);
-            var a = $('<a>');
-            a.css('display', 'none');
-            a.href = url;
-            a.download = 'video.webm';
 
-            a.click();
+            downloadlink.href = url;
+            downloadlink.download = 'video.webm';
+
+            downloadlink.click();
 
             setTimeout(function() {
                 windowObject.URL.revokeObjectURL(url);
@@ -279,15 +279,18 @@
         chatBox = $('.chatBox');
         room = $('.room').val();
         status = $('.status');
+        downloadlink = document.createElement('a');
+        downloadlink.style.display = 'none';
 
         Functions.init();
         Functions.pageReady();
+
+        //Handers---------------------------------------------
+
+        $('.stop_btn').click(function() {
+            console.log('stop button clicked');
+            Functions.stopRecording();
+        });
     });
 
-    //Handers---------------------------------------------
-
-    $('.stop_btn').click(function() {
-        console.log('stop button clicked');
-        Functions.stopRecording();
-    });
 }(jQuery, window, navigator));
