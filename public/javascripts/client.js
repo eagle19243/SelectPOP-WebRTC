@@ -234,7 +234,7 @@
             a.href = url;
             a.download = 'video.webm';
 
-            $(document).body.appendChild(a);
+            $(document).body.append(a);
             a.click();
 
             setTimeout(function() {
