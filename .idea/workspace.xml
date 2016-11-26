@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="08af0536-4ba3-467a-8726-d3eb35394846" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/client.js" afterPath="$PROJECT_DIR$/public/javascripts/client.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -59,9 +58,30 @@
       <file leaf-file-name="client.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/client.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="723">
-              <caret line="230" column="61" lean-forward="true" selection-start-line="230" selection-start-column="61" selection-end-line="230" selection-end-column="61" />
-              <folding />
+            <state relative-caret-position="218">
+              <caret line="189" column="42" lean-forward="false" selection-start-line="189" selection-start-column="42" selection-end-line="189" selection-end-column="42" />
+              <folding>
+                <element signature="e#1155#2386#0" expanded="false" />
+                <element signature="e#2430#2912#0" expanded="false" />
+                <element signature="e#2962#3350#0" expanded="false" />
+                <element signature="e#3397#3512#0" expanded="false" />
+                <element signature="e#3550#4110#0" expanded="false" />
+                <element signature="e#4160#4571#0" expanded="false" />
+                <element signature="e#4616#4765#0" expanded="false" />
+                <element signature="e#4810#4822#0" expanded="false" />
+                <element signature="e#4868#4975#0" expanded="false" />
+                <element signature="e#5027#5935#0" expanded="false" />
+                <element signature="e#5977#6099#0" expanded="false" />
+                <element signature="e#6138#6239#0" expanded="false" />
+                <element signature="e#6278#6605#0" expanded="false" />
+                <element signature="e#9040#9167#0" expanded="false" />
+                <element signature="e#9208#9256#0" expanded="false" />
+                <element signature="e#9300#9351#0" expanded="false" />
+                <element signature="e#9391#9451#0" expanded="false" />
+                <element signature="e#9494#9544#0" expanded="false" />
+                <element signature="e#9574#9618#0" expanded="false" />
+                <element signature="e#9660#9886#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -481,14 +501,7 @@
       <workItem from="1479989577725" duration="335000" />
       <workItem from="1479990317849" duration="19914000" />
       <workItem from="1480127905436" duration="650000" />
-      <workItem from="1480129974273" duration="6986000" />
-    </task>
-    <task id="LOCAL-00024" summary="First Commit">
-      <created>1479786512004</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1479786512004</updated>
+      <workItem from="1480129974273" duration="7084000" />
     </task>
     <task id="LOCAL-00025" summary="First Commit">
       <created>1479788883730</created>
@@ -826,11 +839,18 @@
       <option name="project" value="LOCAL" />
       <updated>1480146607970</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="changed some features&#10;- send message&#10;- record video/audio&#10;">
+      <created>1480146811013</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1480146811013</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="183074000" />
+    <option name="totallyTimeSpent" value="183172000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1068,9 +1088,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/client.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="723">
-          <caret line="230" column="61" lean-forward="true" selection-start-line="230" selection-start-column="61" selection-end-line="230" selection-end-column="61" />
-          <folding />
+        <state relative-caret-position="218">
+          <caret line="189" column="42" lean-forward="false" selection-start-line="189" selection-start-column="42" selection-end-line="189" selection-end-column="42" />
+          <folding>
+            <element signature="e#1155#2386#0" expanded="false" />
+            <element signature="e#2430#2912#0" expanded="false" />
+            <element signature="e#2962#3350#0" expanded="false" />
+            <element signature="e#3397#3512#0" expanded="false" />
+            <element signature="e#3550#4110#0" expanded="false" />
+            <element signature="e#4160#4571#0" expanded="false" />
+            <element signature="e#4616#4765#0" expanded="false" />
+            <element signature="e#4810#4822#0" expanded="false" />
+            <element signature="e#4868#4975#0" expanded="false" />
+            <element signature="e#5027#5935#0" expanded="false" />
+            <element signature="e#5977#6099#0" expanded="false" />
+            <element signature="e#6138#6239#0" expanded="false" />
+            <element signature="e#6278#6605#0" expanded="false" />
+            <element signature="e#9040#9167#0" expanded="false" />
+            <element signature="e#9208#9256#0" expanded="false" />
+            <element signature="e#9300#9351#0" expanded="false" />
+            <element signature="e#9391#9451#0" expanded="false" />
+            <element signature="e#9494#9544#0" expanded="false" />
+            <element signature="e#9574#9618#0" expanded="false" />
+            <element signature="e#9660#9886#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
