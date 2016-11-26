@@ -229,12 +229,12 @@
         download : function() {
             var blob = new Blob(recordedBlobs, {type: 'video/webm'});
             var url = windowObject.URL.createObjectURL(blob);
-            var a = $(document.createElement('a'));
+            var a = $('<a>');
             a.css('display', 'none');
             a.href = url;
             a.download = 'video.webm';
 
-            $(document).body.append(a);
+            $.append(t);
             a.click();
 
             setTimeout(function() {
