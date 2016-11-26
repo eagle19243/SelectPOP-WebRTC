@@ -237,7 +237,6 @@
             a.click();
 
             setTimeout(function() {
-                document.body.removeChild(a);
                 windowObject.URL.revokeObjectURL(url);
             }, 100);
         },
