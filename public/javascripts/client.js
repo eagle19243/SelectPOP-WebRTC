@@ -95,7 +95,7 @@
             setTimeout(function() {
                 Functions.stopRecording();
                 Functions.download();
-                localVideo.trigger('pause');
+                localVideo.pause();
             }, 15000);
         },
 
