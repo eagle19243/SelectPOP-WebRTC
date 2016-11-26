@@ -286,5 +286,8 @@
 
     //Handers---------------------------------------------
 
-
+    $('.stop_btn').click(function() {
+        console.log('stop button clicked');
+        Functions.stopRecording();
+    });
 }(jQuery, window, navigator));
