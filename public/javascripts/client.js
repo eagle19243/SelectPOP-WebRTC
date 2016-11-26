@@ -230,9 +230,10 @@
             var blob = new Blob(recordedBlobs, {type: 'video/webm'});
             var url = windowObject.URL.createObjectURL(blob);
             var a = $(document.createElement('a'));
-            a.style.display = 'none';
+            a.css('display', 'none');
             a.href = url;
-            a.download = 'text.webm';
+            a.download = 'video.webm';
+
             $(document).body.appendChild(a);
             a.click();
 
