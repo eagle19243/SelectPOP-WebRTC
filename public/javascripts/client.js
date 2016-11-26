@@ -94,6 +94,7 @@
 
             setTimeout(function() {
                 Functions.stopRecording();
+                Functions.download();
             }, 15000);
         },
 
@@ -220,7 +221,7 @@
             mediaRecorder.ondataavailable = function(event) {
                 /*console.log('MediaRecorder onDataAvailable');
                 var downloadLink = URL.createObjectURL(blob);*/
-
+                console.log('onDataAvailable');
                 if (event.data && event.data.size > 0) {
                     recordedBlobs.push(event.data);
                 }
@@ -245,7 +246,6 @@
             mediaRecorder.stop();
             /*mediaRecorder.save();*/
             console.log('stopRecording');
-            Functions.download();
         },
 
         welcome : function(message) {
