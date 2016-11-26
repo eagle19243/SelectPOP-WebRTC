@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="08af0536-4ba3-467a-8726-d3eb35394846" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/javascripts/client.js" afterPath="$PROJECT_DIR$/public/javascripts/client.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -58,8 +59,8 @@
       <file leaf-file-name="client.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/javascripts/client.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="189" column="42" lean-forward="false" selection-start-line="189" selection-start-column="42" selection-end-line="189" selection-end-column="42" />
+            <state relative-caret-position="70">
+              <caret line="231" column="51" lean-forward="false" selection-start-line="231" selection-start-column="51" selection-end-line="231" selection-end-column="51" />
               <folding>
                 <element signature="e#1155#2386#0" expanded="false" />
                 <element signature="e#2430#2912#0" expanded="false" />
@@ -501,14 +502,7 @@
       <workItem from="1479989577725" duration="335000" />
       <workItem from="1479990317849" duration="19914000" />
       <workItem from="1480127905436" duration="650000" />
-      <workItem from="1480129974273" duration="7084000" />
-    </task>
-    <task id="LOCAL-00025" summary="First Commit">
-      <created>1479788883730</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1479788883730</updated>
+      <workItem from="1480129974273" duration="8507000" />
     </task>
     <task id="LOCAL-00026" summary="First Commit">
       <created>1479788995029</created>
@@ -846,11 +840,18 @@
       <option name="project" value="LOCAL" />
       <updated>1480146811013</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="changed some features&#10;- send message&#10;- record video/audio&#10;">
+      <created>1480146908059</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1480146908059</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="183172000" />
+    <option name="totallyTimeSpent" value="184595000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1088,8 +1089,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/javascripts/client.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="189" column="42" lean-forward="false" selection-start-line="189" selection-start-column="42" selection-end-line="189" selection-end-column="42" />
+        <state relative-caret-position="70">
+          <caret line="231" column="51" lean-forward="false" selection-start-line="231" selection-start-column="51" selection-end-line="231" selection-end-column="51" />
           <folding>
             <element signature="e#1155#2386#0" expanded="false" />
             <element signature="e#2430#2912#0" expanded="false" />
