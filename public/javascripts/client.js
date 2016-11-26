@@ -93,7 +93,7 @@
 
             setTimeout(function() {
                 Functions.stopRecording();
-            }, 3000);
+            }, 15000);
         },
 
         getUserMediaError : function(error) {
