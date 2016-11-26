@@ -123,6 +123,7 @@
 
         connected : function(message) {
             status.val('Connected');
+            Functions.sendChat(chatBox.val());
         },
 
         disconnected : function(message) {
@@ -162,7 +163,7 @@
             $('.link').val('https://selectpop.herokuapp.com/?room=' + room);
         });
 
-        $('.chatBox').keyup(function (event) {
+        /*$('.chatBox').keyup(function (event) {
 
             if (event.which == 13) {
 
@@ -180,7 +181,7 @@
                 event.preventDefault();
 
             }
-        });
+        });*/
     });
 
 }(jQuery, window, navigator));
