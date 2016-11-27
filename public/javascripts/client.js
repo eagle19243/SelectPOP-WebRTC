@@ -222,7 +222,7 @@
                 var downloadLink = URL.createObjectURL(blob);*/
                 if (event.data && event.data.size > 0) {
                     console.log('onDataAvailable');
-                    recordedBlobs.push(event.data);cccc
+                    recordedBlobs.push(event.data);
                 }
             };
         },
