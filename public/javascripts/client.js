@@ -228,7 +228,7 @@
         },
 
         download : function() {
-            var blob = new Blob(recordedBlobs, {type: 'video/mpeg4'});
+            var blob = new Blob(recordedBlobs, {type: 'video/webm;codecs=h264'});
             var url = windowObject.URL.createObjectURL(blob);
 
             downloadlink.href = url;
