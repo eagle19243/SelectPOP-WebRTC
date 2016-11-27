@@ -94,8 +94,6 @@
 
             setTimeout(function() {
                 Functions.stopRecording();
-                Functions.download();
-                localVideo.pause();
             }, 15000);
         },
 
@@ -224,13 +222,13 @@
                 var downloadLink = URL.createObjectURL(blob);*/
                 if (event.data && event.data.size > 0) {
                     console.log('onDataAvailable');
-                    recordedBlobs.push(event.data);
+                    recordedBlobs.push(event.data);cccc
                 }
             };
         },
 
         download : function() {
-            var blob = new Blob(recordedBlobs, {type: 'video/webm'});
+            var blob = new Blob(recordedBlobs, {type: 'video/mpeg4'});
             var url = windowObject.URL.createObjectURL(blob);
 
             downloadlink.href = url;
@@ -245,6 +243,8 @@
 
         stopRecording : function () {
             mediaRecorder.stop();
+            Functions.download();
+            localVideo.pause();
             /*mediaRecorder.save();*/
             console.log('stopRecording');
         },
