@@ -185,6 +185,7 @@
 
         startRecording : function(stream) {
             console.log('Recording started');
+            console.log(stream);
 
             var options = {mimeType: 'video/webm;codecs=vp9'};
 
