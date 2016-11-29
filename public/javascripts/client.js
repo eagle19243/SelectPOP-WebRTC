@@ -186,14 +186,14 @@
         startRecording : function(stream) {
             console.log('Recording started');
 
-            var options = {mimeType: 'video/mp4;codecs=vp9'};
+            var options = {mimeType: 'video/webm;codecs=vp9'};
 
             if (!MediaRecorder.isTypeSupported(options.mimeType)) {
                 console.log(options.mimeType + ' is not Supported');
-                options = {mimeType: 'video/mp4;codecs=vp8'};
+                options = {mimeType: 'video/webm;codecs=vp8'};
                 if (!MediaRecorder.isTypeSupported(options.mimeType)) {
                     console.log(options.mimeType + ' is not Supported');
-                    options = {mimeType: 'video/mp4'};
+                    options = {mimeType: 'video/webm'};
                     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
                         console.log(options.mimeType + ' is not Supported');
                         options = {mimeType: ''};
