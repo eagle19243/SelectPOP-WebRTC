@@ -171,7 +171,7 @@
         },
 
         playMessage : function(msg) {
-            /*VoiceRSS.speech({
+            VoiceRSS.speech({
                 key: voice_rss_key,
                 src: msg,
                 hl: 'en-us',
@@ -179,8 +179,8 @@
                 c: 'mp3',
                 f: '44khz_16bit_stereo',
                 ssml:false
-            });*/
-            responsiveVoice.speak(msg, "UK English Male");
+            });
+            /*responsiveVoice.speak(msg, "UK English Male");*/
         },
 
         startRecording : function(stream) {
