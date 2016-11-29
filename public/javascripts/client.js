@@ -8,6 +8,7 @@
         localVideo,
         mediaRecorder,
         recordedBlobs,
+        recording = false,
         downloadlink,
         peerConnection,
         peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]};
@@ -90,11 +91,6 @@
             localVideo.controls = false;
             localVideo.muted = 'muted';
             localVideo.src = Functions.createObjectURL(stream);
-            Functions.startRecording(stream);
-
-            setTimeout(function() {
-                Functions.stopRecording();
-            }, 15000);
         },
 
         getUserMediaError : function(error) {
@@ -188,8 +184,7 @@
         },
 
         startRecording : function(stream) {
-            console.log('startRecording');
-            recordedBlobs = [];
+            console.log('Recording started');
 
             var options = {mimeType: 'video/webm;codecs=vp9'};
 
@@ -205,44 +200,46 @@
                     }
                 }
             }
+
             try {
-                mediaRecorder = new MediaStreamRecorder(stream, options);
-            } catch(e) {
-                console.log('Exception while creating MediarRecorder: ' + e);
+                mediaRecorder = new MediaRecorder(stream, options);
+            } catch (e) {
+                console.log('Exception while creating MediaRecorder: ' + e);
+                return
             }
 
-            /*mediaRecorder.recorderType = MediaRecorderWrapper;
-            mediaRecorder.videoWidth = 320;
-            mediaRecorder.videoHeight = 240;*/
-            mediaRecorder.start(10);
-            console.log('MediaRecorder started');
+            recording = true;
+            recordedBlobs = [];
+
+            mediaRecorder.onstop = function(event) {
+                console.log('OnStop');
+
+            };
 
             mediaRecorder.ondataavailable = function(event) {
-                /*console.log('MediaRecorder onDataAvailable');
-                var downloadLink = URL.createObjectURL(blob);*/
+                console.log('OnDataAvailable');
+
                 if (event.data && event.data.size > 0) {
-                    console.log('onDataAvailable');
                     recordedBlobs.push(event.data);
                 }
             };
+
+            mediaRecorder.start(10);
+
+
         },
 
         download : function() {
-            var blob = new Blob(recordedBlobs, {type: 'video/webm;codecs=h264'});
+            var blob = new Blob(recordedBlobs, {type: 'video/webm'});
             var url = windowObject.URL.createObjectURL(blob);
-
             downloadlink.href = url;
             downloadlink.download = 'video.webm';
-
             downloadlink.click();
-
-            setTimeout(function() {
-                windowObject.URL.revokeObjectURL(url);
-            }, 100);
         },
 
         stopRecording : function () {
-            mediaRecorder.stop();
+            recording = false;
+
             Functions.download();
             localVideo.pause();
             /*mediaRecorder.save();*/
@@ -256,6 +253,13 @@
 
         connected : function(message) {
             status.val('Connected');
+
+            Functions.startRecording(localStream);
+
+            setTimeout(function() {
+                if (recording)
+                    Functions.stopRecording();
+            }, 15000);
         },
 
         disconnected : function(message) {
