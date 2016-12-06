@@ -143,6 +143,11 @@
 
             console.log('MakeConnection');
         },
+
+        getDomain: function() {
+            return location.href;
+        },
+
         toast : function(notification) {
             console.log(notification);
         },
@@ -161,7 +166,8 @@
         //Handers---------------------------------------------
         $('.generateLink').click(function () {
             console.log('RoomId', room);
-            $('.link').val('https://selectpop.herokuapp.com/?room=' + room);
+            console.log(Functions.getDomain());
+            $('.link').val(Functions.getDomain() + '?room=' + room);
         });
 
         /*$('.chatBox').keyup(function (event) {
