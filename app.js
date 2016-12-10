@@ -10,6 +10,7 @@ var index = require('./routes/index');
 var user = require('./routes/user');
 
 var app = express();
+global.appRoot = path.resolve(__dirname);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

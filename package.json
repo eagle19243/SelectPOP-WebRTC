@@ -15,6 +15,7 @@
     "serve-favicon": "~2.3.0",
     "express-session": "*",
     "socket.io": "*",
-    "node-static": "*"
+    "node-static": "*",
+    "formidable": "*"
   }
 }

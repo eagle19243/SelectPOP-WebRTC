@@ -80,6 +80,7 @@ module.exports = function(server) {
         io.to(client1).emit("connected", client2);
         io.to(client2).emit("connected", client1);
     }
+
     var removeConnection = function(client) {
         var i, length = pairArray.length;
         for(i = 0; i < length; i++) {
@@ -89,6 +90,7 @@ module.exports = function(server) {
             }
         }
     }
+
     //will return the client of connected source
     var getClient = function(source) {
         var i, length = pairArray.length, client;
