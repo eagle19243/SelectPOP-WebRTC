@@ -243,7 +243,7 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    alert("uploaded successfully");
+                    console.log("uploaded successfully");
                 }
             });
 

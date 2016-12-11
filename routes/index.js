@@ -36,11 +36,14 @@ router.post('/upload_video', function(req, res) {
         });
     });*/
 
+    var date = new Date();
+
     var form = new formidable.IncomingForm();
     form.uploadDir = appRoot + "/videos";
     
     form.on('file', function(field, file){
-        fs.rename(file.path, path.join(form.uploadDir, file.name));
+        //fs.rename(file.path, path.join(form.uploadDir, file.name));
+        fs.rename(file.path, path.join(form.uploadDir, date.getTime() + ".webm"));
     });
 
     form.on('error', function(err){
